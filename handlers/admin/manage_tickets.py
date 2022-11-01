@@ -3,8 +3,6 @@ import bot.config as cnf
 from bot.keyboards import tickets_kb
 
 
-
-
 async def new_ticket(data):
     category = ''
 
@@ -26,12 +24,12 @@ async def new_ticket(data):
     problem = data['Problem']
 
     msg = f"Ноывй тикет!\n" \
-          f"Отправитель: {owner}\n" \
-          f"Категория: {category}\n" \
-          f"Аудитория: {cabinet}\n" \
-          f"Проблема: {problem}\n"
+        f"Отправитель: {owner}\n" \
+        f"Категория: {category}\n" \
+        f"Аудитория: {cabinet}\n" \
+        f"Проблема: {problem}\n"
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb())
 
 
-
-async def accept_ticket
+async def accept_ticket():
+    pass

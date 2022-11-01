@@ -113,3 +113,11 @@ def cabinets_kb(floor):
         main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')
         keyboard.add(main_menu)
         return keyboard
+
+
+def tickets_kb():
+    keyboard = InlineKeyboardMarkup()
+    accept = InlineKeyboardButton("Принять",callback_data='accept')
+    deny = InlineKeyboardButton("Отклонить",callback_data='deny')
+    keyboard.add(accept, deny)
+    return keyboard

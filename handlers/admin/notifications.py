@@ -9,8 +9,4 @@ async def new_bug(data):
     await bot.send_message(cnf.CHAT_ID, msg)
 
 
-async def new_ticket():
-    msg = f"Ноывй тикет" \
-          f"Отправитель" \
-          f"Проблема"
-    await bot.send_message(cnf.CHAT_ID, msg)
+

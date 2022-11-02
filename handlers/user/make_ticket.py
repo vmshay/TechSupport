@@ -3,9 +3,9 @@ from aiogram import types, Dispatcher
 from bot.keyboards import default_tickets_kb, cabinets_kb, main_kb, floor_kb
 from aiogram.dispatcher.storage import FSMContext
 from bot.States import TicketState
-from handlers.admin.manage_tickets import new_ticket
+from bot.notifications import new_ticket
 from datetime import datetime
-from bot import database
+from bot import database, sql
 
 
 async def return_menu(call: types.CallbackQuery, state: FSMContext):
@@ -42,7 +42,7 @@ async def choose_cabinet(call: types.CallbackQuery):
 
 async def get_problem(call: types.CallbackQuery, state: FSMContext):
     msg = await call.message.edit_text("Опишите проблему")
-    await state.update_data(Cab=call.data)
+    await state.update_data(cab=call.data)
     await TicketState.Problem.set()
     await asyncio.sleep(30)
     await msg.delete()
@@ -53,17 +53,19 @@ async def send_report(message: types.Message, state: FSMContext):
     await message.delete()
     date = datetime.now().date()
     time = datetime.now().time().strftime("%H:%M")
-    await state.update_data(Problem=message.text)
+    await state.update_data(problem=message.text)
     await state.update_data(date=date)
     await state.update_data(t_new=time)
+    await state.update_data(status='new')
     msg = await message.answer("Заявка направлена в технический отдел")
-    # TODO Отправка в базу
+    data = await state.get_data()
+    db.sql_query_send(sql=sql.send_ticket(data))
     ticket_id = db.sql_fetchone('select max(id) from tickets')
     await state.update_data(id=ticket_id)
     data = await state.get_data()
     await state.finish()
     await message.answer(str(data))
-    # await new_ticket(data)
+    await new_ticket(data)
     await asyncio.sleep(20)
     await msg.delete()
 

@@ -1,2 +1,2 @@
 import handlers.Start
-import handlers.user.make_ticket
+import handlers.registration

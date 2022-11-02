@@ -3,7 +3,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.storage import FSMContext
 from bot.keyboards import main_kb
 from bot.States import SendBugState
-from handlers.admin.notifications import new_bug
+from bot.notifications import new_bug
 
 
 async def start_cmd(message: types.Message):
@@ -39,4 +39,3 @@ def main_register(dp: Dispatcher):
     dp.register_message_handler(start_cmd, commands=['start', 'help'])
     dp.register_message_handler(get_report, commands=['feedback'])
     dp.register_message_handler(send_report, state=SendBugState.send_bug)
-

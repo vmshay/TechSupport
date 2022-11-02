@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def main_kb():
@@ -17,6 +17,7 @@ def default_tickets_kb():
     need = InlineKeyboardButton('🖱️ Нужна периферия', callback_data='peripherals')
     printer = InlineKeyboardButton('🖨️ Не работает принтер', callback_data='printer')
     other = InlineKeyboardButton('❔ Другое ', callback_data='other')
+    main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')
 
     keyboard.add(pc)
     keyboard.add(not_enter)
@@ -24,6 +25,7 @@ def default_tickets_kb():
     keyboard.add(printer)
     keyboard.add(not_internet)
     keyboard.add(other)
+    keyboard.add(main_menu)
     return keyboard
 
 
@@ -115,9 +117,9 @@ def cabinets_kb(floor):
         return keyboard
 
 
-def tickets_kb():
+def tickets_kb(t_id):
     keyboard = InlineKeyboardMarkup()
-    accept = InlineKeyboardButton("Принять",callback_data='accept')
-    deny = InlineKeyboardButton("Отклонить",callback_data='deny')
+    accept = InlineKeyboardButton("Принять", callback_data=f"accept:{t_id}")
+    deny = InlineKeyboardButton("Отклонить", callback_data=f"deny:{t_id}")
     keyboard.add(accept, deny)
     return keyboard

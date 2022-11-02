@@ -1,47 +1,35 @@
-from bot.dispatcher import bot
-import bot.config as cnf
-from bot.keyboards import tickets_kb
 from aiogram import types, Dispatcher
-
-
-async def new_ticket(data):
-    category = ''
-
-    if data['Category'] == 'PC':
-        category = '💻 Не включается ПК'
-    if data['Category'] == 'deny_login':
-        category = '🚪 Не входит в Moodle/ПК'
-    if data['Category'] == 'no_internet':
-        category = '🌐 Нет интернета'
-    if data['Category'] == 'peripherals':
-        category = '🖱️ Нужна периферия'
-    if data['Category'] == 'printer':
-        category = '🖨️ Не работает принтер'
-    if data['Category'] == 'other':
-        category = '❔ Другое '
-
-    owner = data['name']
-    cabinet = data['Cab'].split(' ')[1]
-    problem = data['Problem']
-
-    msg = f"Новый тикет!\n" \
-          f"Отправитель: {owner}\n" \
-          f"Категория: {category}\n" \
-          f"Аудитория: {cabinet}\n" \
-          f"Проблема: {problem}\n"
-    await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb())
+from bot import database
+import time
+from datetime import datetime
 
 
 async def accept_ticket(call: types.CallbackQuery):
-    await call.message.edit_text(f"Заявка в работе у {call.from_user.id}")
-    print("accept")
+    st = time.time()
+    t_id = call.data.split(":")[1]
+    db = database.Database()
+    date = datetime.now().date()
+    t_progress = datetime.now().time().strftime("%H:%M")
+    username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
+    await call.message.edit_text(f"Исполнитель: {username}\n"
+                                 f"ID заявки: {t_id}\n"
+                                 f"Дата: {date}\n"
+                                 f"Время: {t_progress}")
+    print("DEBUG: Accept ID", t_id)
+    et = time.time()
+    print(f"DEBUG: Время подтверждения заявки: {et - st}")
+    print("В работе с ", t_progress)
+    # TODO: отправка сообщения заявителю
 
 
 async def deny_ticket(call: types.CallbackQuery):
+    t_completed = datetime.now().time().strftime("%H:%M")
+    t_id = call.data.split(":")[1]
     await call.message.edit_text(f"{call.from_user.id} забрал заявку")
-    print("deny")
+    print("deny", t_id)
+    print("Отменена в ", t_completed)
 
 
 def register(dp: Dispatcher):
-    dp.register_callback_query_handler(accept_ticket, text='accept')
-    dp.register_callback_query_handler(deny_ticket, text='deny')
+    dp.register_callback_query_handler(accept_ticket, text_startswith='accept:')
+    dp.register_callback_query_handler(deny_ticket, text_startswith='deny:')

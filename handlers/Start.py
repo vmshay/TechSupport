@@ -7,7 +7,7 @@ from handlers.admin.notifications import new_bug
 
 
 async def start_cmd(message: types.Message):
-    await message.delete()
+    # await message.delete()
     await message.answer(f"🤖Вас приветствует бот технической поддержки🤖\n"
                          f"\n"
                          f"Для того чтобы сформировать заявку нажмите кнопку ниже.\n\n"

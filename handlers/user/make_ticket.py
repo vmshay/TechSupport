@@ -4,6 +4,8 @@ from bot.keyboards import default_tickets_kb, cabinets_kb, main_kb, floor_kb
 from aiogram.dispatcher.storage import FSMContext
 from bot.States import TicketState
 from handlers.admin.manage_tickets import new_ticket
+from datetime import datetime
+from bot import database
 
 
 async def return_menu(call: types.CallbackQuery, state: FSMContext):
@@ -21,8 +23,11 @@ async def return_menu(call: types.CallbackQuery, state: FSMContext):
 
 async def init_ticket(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_text("Выберите категорию обращения", reply_markup=default_tickets_kb())
+    db = database.Database()
+    username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     await TicketState.init.set()
     await state.update_data(tg_id=call.from_user.id)
+    await state.update_data(name=username)
 
 
 async def choose_floor(call: types.CallbackQuery):
@@ -32,7 +37,6 @@ async def choose_floor(call: types.CallbackQuery):
 
 async def choose_cabinet(call: types.CallbackQuery):
     await call.message.edit_text("Выберите аудиторию", reply_markup=cabinets_kb(call.data))
-    # await state.update_data(Floor=call.data)
     await TicketState.Cab.set()
 
 
@@ -45,13 +49,21 @@ async def get_problem(call: types.CallbackQuery, state: FSMContext):
 
 
 async def send_report(message: types.Message, state: FSMContext):
+    db = database.Database()
     await message.delete()
+    date = datetime.now().date()
+    time = datetime.now().time().strftime("%H:%M")
     await state.update_data(Problem=message.text)
+    await state.update_data(date=date)
+    await state.update_data(t_new=time)
     msg = await message.answer("Заявка направлена в технический отдел")
+    # TODO Отправка в базу
+    ticket_id = db.sql_fetchone('select max(id) from tickets')
+    await state.update_data(id=ticket_id)
     data = await state.get_data()
     await state.finish()
-    print(data)
-    await new_ticket(data)
+    await message.answer(str(data))
+    # await new_ticket(data)
     await asyncio.sleep(20)
     await msg.delete()
 

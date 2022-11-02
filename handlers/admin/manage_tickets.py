@@ -20,21 +20,28 @@ async def new_ticket(data):
     if data['Category'] == 'other':
         category = '❔ Другое '
 
-    owner = data['tg_id']
+    owner = data['name']
     cabinet = data['Cab'].split(' ')[1]
     problem = data['Problem']
 
     msg = f"Новый тикет!\n" \
-        f"Отправитель: {owner}\n" \
-        f"Категория: {category}\n" \
-        f"Аудитория: {cabinet}\n" \
-        f"Проблема: {problem}\n"
+          f"Отправитель: {owner}\n" \
+          f"Категория: {category}\n" \
+          f"Аудитория: {cabinet}\n" \
+          f"Проблема: {problem}\n"
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb())
 
 
 async def accept_ticket(call: types.CallbackQuery):
     await call.message.edit_text(f"Заявка в работе у {call.from_user.id}")
+    print("accept")
+
+
+async def deny_ticket(call: types.CallbackQuery):
+    await call.message.edit_text(f"{call.from_user.id} забрал заявку")
+    print("deny")
 
 
 def register(dp: Dispatcher):
     dp.register_callback_query_handler(accept_ticket, text='accept')
+    dp.register_callback_query_handler(deny_ticket, text='deny')

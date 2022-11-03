@@ -2,6 +2,7 @@ from datetime import datetime
 from aiogram import types, Dispatcher
 from bot import database
 
+
 async def deny_ticket(call: types.CallbackQuery):
     t_id = call.data.split(":")[1]
     db = database.Database()

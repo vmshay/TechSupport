@@ -9,32 +9,39 @@ from bot import database
 
 async def start_cmd(message: types.Message):
     # await message.delete()
-    await message.answer(f"🤖Вас приветствует бот технической поддержки🤖\n"
-                         f"\n"
-                         f"Для того чтобы сформировать заявку нажмите кнопку ниже.\n\n"
-                         f"Если есть пожелания или замечания\n"
-                         f"Можете обратиться к @FeldwebelWillman\n"
-                         f"Или воспользовтаься обратной связью /feedback",
-                         reply_markup=main_kb())
+    if message.chat.type == 'private':
+        await message.answer(f"🤖Вас приветствует бот технической поддержки🤖\n"
+                             f"\n"
+                             f"Для того чтобы сформировать заявку нажмите кнопку ниже.\n\n"
+                             f"Если есть пожелания или замечания\n"
+                             f"Можете обратиться к @FeldwebelWillman\n"
+                             f"Или воспользовтаься обратной связью /feedback",
+                             reply_markup=main_kb())
+    else:
+        await message.answer(f"Если Вы хотите оставить заявку, "
+                             f"напишите лично @TTITTechSuppBot")
 
 
 async def get_ticket(message: types.Message):
-    data = message.get_args()
-    db = database.Database()
-    try:
-        ticket = db.sql_fetchall(
-            f"select category, cab,problem,category,status, t_new,t_progress,t_increase, t_completed from tickets where id={data}")
-        await message.answer(f"Аудитория {ticket[0]['cab']}\n"
-                             f"Проблема {ticket[0]['problem']}\n"
-                             f"Статус {ticket[0]['status']}\n"
-                             f"Инициирована в {ticket[0]['t_new']}\n"
-                             f"Взята в работу {ticket[0]['t_progress']}\n"
-                             f"Передана выше {ticket[0]['t_increase']}\n"
-                             f"Закрыта {ticket[0]['t_completed']}\n"
-                             f"")
-    except:
-        await message.answer("Такого ID нет")
-
+    if message.chat.type == 'private':
+        data = message.get_args()
+        db = database.Database()
+        try:
+            ticket = db.sql_fetchall(
+                f"select category, cab,problem,category,status, t_new,t_progress,t_increase, t_completed from tickets where id={data}")
+            await message.answer(f"Аудитория {ticket[0]['cab']}\n"
+                                 f"Проблема {ticket[0]['problem']}\n"
+                                 f"Статус {ticket[0]['status']}\n"
+                                 f"Инициирована в {ticket[0]['t_new']}\n"
+                                 f"Взята в работу {ticket[0]['t_progress']}\n"
+                                 f"Передана выше {ticket[0]['t_increase']}\n"
+                                 f"Закрыта {ticket[0]['t_completed']}\n"
+                                 f"")
+        except:
+            await message.answer("Такого ID нет")
+    else:
+        await message.answer(f"Если Вы хотите оставить заявку, "
+                             f"напишите лично @TTITTechSuppBot")
 
 async def get_report(message: types.Message):
     await message.delete()

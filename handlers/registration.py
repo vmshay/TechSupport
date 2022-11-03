@@ -3,7 +3,6 @@ from aiogram.dispatcher.storage import FSMContext
 from bot import database, sql
 
 
-
 async def registration(message: types.Message):
     db = database.Database()
     await message.delete()

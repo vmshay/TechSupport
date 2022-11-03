@@ -9,12 +9,11 @@ def check_approved(data):
 
 
 def send_ticket(data):
-    sql = f"insert into tickets (client,category,cab,problem,status,t_date,t_new) values ('{data['tg_id']}'," \
+    sql = f"insert into tickets (client,category,cab,problem,status,t_new) values ('{data['tg_id']}'," \
         f"                                                                                '{data['Category']}'," \
         f"                                                                                '{data['cab']}'," \
         f"                                                                                '{data['problem']}'," \
         f"                                                                                '{data['status']}'," \
-        f"                                                                                '{data['date']}'," \
         f"                                                                                '{data['t_new']}')"
     return sql
 

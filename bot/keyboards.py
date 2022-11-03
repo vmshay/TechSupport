@@ -117,9 +117,25 @@ def cabinets_kb(floor):
         return keyboard
 
 
-def tickets_kb(t_id):
+def tickets_kb(accept, deny, t_id):
     keyboard = InlineKeyboardMarkup()
-    accept = InlineKeyboardButton("Принять", callback_data=f"accept:{t_id}")
-    deny = InlineKeyboardButton("Отклонить", callback_data=f"deny:{t_id}")
+    accept = InlineKeyboardButton("Принять", callback_data=f"{accept}:{t_id}")
+    deny = InlineKeyboardButton("Отклонить", callback_data=f"{deny}:{t_id}")
+    force_close = InlineKeyboardButton("Закрыть принудителльно",callback_data=f"force:{t_id}")
     keyboard.add(accept, deny)
+    keyboard.add(force_close)
+    return keyboard
+
+
+def user_response(t_id):
+    keyboard = InlineKeyboardMarkup()
+    complete = InlineKeyboardButton("Выполненно", callback_data=f"closed:{t_id}")
+    keyboard.add(complete)
+    return keyboard
+
+
+def increase_ticket(t_id):
+    keyboard = InlineKeyboardMarkup()
+    increase = InlineKeyboardButton("передать выше", callback_data=f"increase:{t_id}")
+    keyboard.add(increase)
     return keyboard

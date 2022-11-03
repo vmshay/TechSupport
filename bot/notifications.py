@@ -46,8 +46,7 @@ async def notify_user_accept(u_id, t_id):
 
 
 async def notify_user_increase(u_id):
-    msg = f"Статус заявки был изменен\n" \
-          f"Для создания новой заявки нажмите /start"
+    msg = f"Статус заявки был изменен"
     await bot.send_message(u_id, msg)
 
 

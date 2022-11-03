@@ -4,8 +4,8 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 def main_kb():
     keyboard = InlineKeyboardMarkup(resize_keyboard=True)
     create_ticket = InlineKeyboardButton('🎫 Создать заявку', callback_data='init')
-    status_ticket = InlineKeyboardButton('Статус заявок', callback_data='status')
-    keyboard.add(create_ticket, status_ticket)
+    # status_ticket = InlineKeyboardButton('Статус заявок', callback_data='status')
+    keyboard.add(create_ticket)
     return keyboard
 
 
@@ -121,7 +121,7 @@ def tickets_kb(accept, deny, t_id):
     keyboard = InlineKeyboardMarkup()
     accept = InlineKeyboardButton("Принять", callback_data=f"{accept}:{t_id}")
     deny = InlineKeyboardButton("Отклонить", callback_data=f"{deny}:{t_id}")
-    force_close = InlineKeyboardButton("Закрыть принудителльно",callback_data=f"force:{t_id}")
+    force_close = InlineKeyboardButton("Закрыть принудителльно", callback_data=f"force:{t_id}")
     keyboard.add(accept, deny)
     keyboard.add(force_close)
     return keyboard
@@ -136,6 +136,15 @@ def user_response(t_id):
 
 def increase_ticket(t_id):
     keyboard = InlineKeyboardMarkup()
-    increase = InlineKeyboardButton("передать выше", callback_data=f"increase:{t_id}")
+    increase = InlineKeyboardButton("Передать выше", callback_data=f"increase:{t_id}")
+    force_close = InlineKeyboardButton("Закрыть принудителльно", callback_data=f"force:{t_id}")
     keyboard.add(increase)
+    keyboard.add(force_close)
+    return keyboard
+
+
+def force_close(t_id):
+    keyboard = InlineKeyboardMarkup()
+    force_close = InlineKeyboardButton("Закрыть принудителльно", callback_data=f"force:{t_id}")
+    keyboard.add(force_close)
     return keyboard

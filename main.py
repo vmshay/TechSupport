@@ -19,5 +19,6 @@ if __name__ == '__main__':
     handlers.admin.deny_ticket.register(dp)
     handlers.admin.force_close.register(dp)
     handlers.admin.increase_ticket.register(dp)
+    handlers.admin.increase_accept.register(dp)
 
     executor.start_polling(dp, skip_updates=True)

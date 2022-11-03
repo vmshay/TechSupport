@@ -10,11 +10,18 @@ async def force_close(call: types.CallbackQuery):
     timestamp = datetime.now().strftime("%d-%m-%y %H:%M:%S")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     client_id = db.sql_fetchone(f"select client from tickets where id = {t_id}")
-    db.sql_query_send(f"update tickets set status='force closed',t_completed = '{timestamp}' where id={t_id}")
-    await call.message.edit_text(f"{username} принудительно закрыл заявку\n"
-                                 f"ID заявки: {t_id}\n"
-                                 f"Время: {timestamp}\n")
-    await notify_user_force_close(client_id)
+    status = db.sql_fetchone(f'select status from tickets where id = {t_id}')
+    if status != 'closed':
+        db.sql_query_send(f"update tickets set t_completed = '{timestamp}',status = 'closed' where id = {t_id}")
+        db.sql_query_send(f"update tickets set status='force closed',t_completed = '{timestamp}' where id={t_id}")
+        await call.message.edit_text(f"{username} принудительно закрыл заявку\n"
+                                     f"ID заявки: {t_id}\n"
+                                     f"Время: {timestamp}\n")
+        await notify_user_force_close(client_id)
+    else:
+        await call.message.edit_text(f"Заявка закрыта поьзователем"
+                                     f"ID заявки: {t_id}"
+                                     f"Время {timestamp}")
 
 
 def register(dp: Dispatcher):

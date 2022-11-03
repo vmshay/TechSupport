@@ -4,6 +4,7 @@ from aiogram.dispatcher.storage import FSMContext
 from bot.keyboards import main_kb
 from bot.States import SendBugState
 from bot.notifications import new_bug
+from bot import database
 
 
 async def start_cmd(message: types.Message):
@@ -11,11 +12,28 @@ async def start_cmd(message: types.Message):
     await message.answer(f"🤖Вас приветствует бот технической поддержки🤖\n"
                          f"\n"
                          f"Для того чтобы сформировать заявку нажмите кнопку ниже.\n\n"
-                         f"Так же вы можете узнать статус заявки.\n\n"
                          f"Если есть пожелания или замечания\n"
                          f"Можете обратиться к @FeldwebelWillman\n"
                          f"Или воспользовтаься обратной связью /feedback",
                          reply_markup=main_kb())
+
+
+async def get_ticket(message: types.Message):
+    data = message.get_args()
+    db = database.Database()
+    try:
+        ticket = db.sql_fetchall(
+            f"select category, cab,problem,category,status, t_new,t_progress,t_increase, t_completed from tickets where id={data}")
+        await message.answer(f"Аудитория {ticket[0]['cab']}\n"
+                             f"Проблема {ticket[0]['problem']}\n"
+                             f"Статус {ticket[0]['status']}\n"
+                             f"Инициирована в {ticket[0]['t_new']}\n"
+                             f"Взята в работу {ticket[0]['t_progress']}\n"
+                             f"Передана выше {ticket[0]['t_increase']}\n"
+                             f"Закрыта {ticket[0]['t_completed']}\n"
+                             f"")
+    except:
+        await message.answer("Такого ID нет")
 
 
 async def get_report(message: types.Message):
@@ -39,3 +57,4 @@ def main_register(dp: Dispatcher):
     dp.register_message_handler(start_cmd, commands=['start', 'help'])
     dp.register_message_handler(get_report, commands=['feedback'])
     dp.register_message_handler(send_report, state=SendBugState.send_bug)
+    dp.register_message_handler(get_ticket, commands=['id'])

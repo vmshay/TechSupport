@@ -6,7 +6,7 @@ from bot import database
 async def deny_ticket(call: types.CallbackQuery):
     t_id = call.data.split(":")[1]
     db = database.Database()
-    timestamp = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     await call.message.edit_text(f"{username} отклонил заявку\n"
                                  f"ID заявки: {t_id}\n"

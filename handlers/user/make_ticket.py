@@ -10,7 +10,6 @@ from bot import database, sql
 
 async def return_menu(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
-    print("FSM сброшен")
     await call.message.edit_text(f"🤖Вас приветствует бот технической поддержки ТТИТ🤖\n"
                                  f"\n"
                                  f"Для того чтобы сформировать заявку нажмите кнопку ниже.\n\n"
@@ -51,11 +50,11 @@ async def get_problem(call: types.CallbackQuery, state: FSMContext):
 async def send_report(message: types.Message, state: FSMContext):
     db = database.Database()
     await message.delete()
-    timestamp = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
     await state.update_data(problem=message.text)
     await state.update_data(t_new=timestamp)
     await state.update_data(status='new')
-    msg = await message.answer("Заявка направлена в технический отдел")
+    msg = await message.answer("Заявка направлена в тех. отдел")
     data = await state.get_data()
     db.sql_query_send(sql=sql.send_ticket(data))
     ticket_id = db.sql_fetchone('select max(id) from tickets')

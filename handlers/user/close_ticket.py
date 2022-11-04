@@ -1,19 +1,21 @@
 from bot import database
 from aiogram import Dispatcher, types
 from datetime import datetime
+from bot.notifications import notify_admins_close
 
 
 async def close_ticket(call: types.CallbackQuery):
     db = database.Database()
     t_id = call.data.split(":")[1]
-    timestamp = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
     status = db.sql_fetchone(f'select status from tickets where id = {t_id}')
 
     if status != 'force closed':
         db.sql_query_send(f"update tickets set t_completed = '{timestamp}',status = 'closed' where id = {t_id}")
         await call.message.edit_text("Заявка закрыта")
+        await notify_admins_close(t_id)
     else:
-        await call.message.edit_text("Заявка была закрыта тех. отделом")
+        await call.message.edit_text("Заявка закрыта тех. отделом")
 
 
 def register(dp: Dispatcher):

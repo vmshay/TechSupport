@@ -12,3 +12,8 @@ class TicketState(StatesGroup):
     Floor = State()
     Cab = State()
     Problem = State()
+
+
+class RegisterStates(StatesGroup):
+    FIO = State()
+    phone = State()

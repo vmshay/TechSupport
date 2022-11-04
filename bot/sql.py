@@ -1,5 +1,5 @@
 def check_id(data):
-    sql = f'select tg_id from user_table where tg_id ={data}'
+    sql = f'select tg_id from users where tg_id ={data}'
     return sql
 
 

@@ -8,7 +8,7 @@ from bot.keyboards import increase_ticket
 async def accept_ticket(call: types.CallbackQuery):
     db = database.Database()
     t_id = call.data.split(":")[1]
-    timestamp = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     client_id = db.sql_fetchone(f"select client from tickets where id = {t_id}")
 

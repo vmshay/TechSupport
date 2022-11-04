@@ -148,3 +148,25 @@ def force_close(t_id):
     force_close = InlineKeyboardButton("Закрыть принудителльно", callback_data=f"force:{t_id}")
     keyboard.add(force_close)
     return keyboard
+
+
+def register_kb():
+    keyboard = InlineKeyboardMarkup()
+    register = InlineKeyboardButton("Регистрация", callback_data="register")
+    keyboard.add(register)
+    return keyboard
+
+
+def reset_register_kb():
+    keyboard = InlineKeyboardMarkup()
+    reset = InlineKeyboardButton("Отменить регистрацию", callback_data="res_register")
+    keyboard.add(reset)
+    return keyboard
+
+
+def new_user_kb(accept, deny, u_id):
+    keyboard = InlineKeyboardMarkup()
+    accept = InlineKeyboardButton("Одобрить", callback_data=f"{accept}:{u_id}")
+    deny = InlineKeyboardButton("Отклонить", callback_data=f"{deny}:{u_id}")
+    keyboard.add(accept, deny)
+    return keyboard

@@ -1,2 +1,1 @@
-import handlers.Start
-import handlers.registration
+import handlers.commands

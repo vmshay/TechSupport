@@ -37,7 +37,7 @@ class Database:
         self.execute(sql)
         response = self.fetchone()
         if response is None:
-            return False
+            return 'None'
         else:
             for v in response.values():
                 return v

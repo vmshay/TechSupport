@@ -6,7 +6,7 @@ from bot.States import TicketState
 from bot.notifications import new_ticket
 from datetime import datetime
 from bot import database, sql
-
+import time
 
 async def return_menu(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
@@ -50,7 +50,7 @@ async def get_problem(call: types.CallbackQuery, state: FSMContext):
 async def send_report(message: types.Message, state: FSMContext):
     db = database.Database()
     await message.delete()
-    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
+    timestamp = int(time.time())
     await state.update_data(problem=message.text)
     await state.update_data(t_new=timestamp)
     await state.update_data(status='new')
@@ -59,6 +59,7 @@ async def send_report(message: types.Message, state: FSMContext):
     db.sql_query_send(sql=sql.send_ticket(data))
     ticket_id = db.sql_fetchone('select max(id) from tickets')
     await state.update_data(id=ticket_id)
+    print(data)
     data = await state.get_data()
     await state.finish()
     await new_ticket(data)

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from bot.dispatcher import bot
 import bot.config as cnf
 from bot.keyboards import tickets_kb, user_response, new_user_kb
@@ -29,13 +31,14 @@ async def new_ticket(data):
     cabinet = data['cab'].split(' ')[1]
     problem = data['problem']
     t_id = data['id']
-
+    time = datetime.fromtimestamp(data['t_new']).strftime("%d.%m.%Y %H:%M")
     msg = f"<b>Новый тикет!</b>\n" \
         f"ID: {t_id}\n" \
         f"Отправитель: {owner}\n" \
         f"Категория: {category}\n" \
         f"Аудитория: {cabinet}\n" \
-        f"Проблема: {problem}\n"
+        f"Проблема: {problem}\n" \
+        f"Дата: {time}"
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb("accept", "deny", t_id))
 
 

@@ -1,13 +1,13 @@
 from bot import database
 from aiogram import Dispatcher, types
-from datetime import datetime
 from bot.notifications import notify_admins_close
+import time
 
 
 async def close_ticket(call: types.CallbackQuery):
     db = database.Database()
     t_id = call.data.split(":")[1]
-    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
+    timestamp = int(time.time())
     status = db.sql_fetchone(f'select status from tickets where id = {t_id}')
 
     if status != 'force closed':

@@ -1,16 +1,18 @@
 from datetime import datetime
 from aiogram import types, Dispatcher
 from bot import database
+import time
 
 
 async def deny_ticket(call: types.CallbackQuery):
     t_id = call.data.split(":")[1]
     db = database.Database()
-    timestamp = datetime.now().strftime("%y-%m-%d %H:%M:%S")
+    timestamp = int(time.time())
+    user_time = datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y %H:%M")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     await call.message.edit_text(f"{username} отклонил заявку\n"
                                  f"ID заявки: {t_id}\n"
-                                 f"Время: {timestamp}\n")
+                                 f"Дата: {user_time}\n")
 
 
 def register(dp: Dispatcher):

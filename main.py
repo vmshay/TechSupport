@@ -5,6 +5,7 @@ import handlers.user.default
 import handlers.admin
 from bot import database
 
+
 if __name__ == '__main__':
     if database.Database().__init__() is None:
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
         handlers.admin.increase_accept.register(dp)
         handlers.admin.accept_user.register(dp)
         handlers.admin.deny_user.register(dp)
-
         executor.start_polling(dp, skip_updates=True)
+
     else:
         print("Не удалось запустить бота")

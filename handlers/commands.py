@@ -39,13 +39,13 @@ async def get_ticket(message: types.Message):
         data = message.get_args()
         db = database.Database()
         try:
+            data = int(data)
             client = db.sql_fetchone(
                 f"SELECT users.name FROM users inner join tickets on users.tg_id = tickets.client  WHERE tickets.id = {data}")
             contactor = db.sql_fetchone(
                 f"SELECT users.name FROM users inner join tickets on users.tg_id = tickets.contactor  WHERE tickets.id = {data}")
             ticket = db.sql_fetchall(
                 f"select id, category, cab,problem,category,status, t_new,t_progress,t_increase, t_completed from tickets where id={data}")
-
             await message.answer(f"ID: {ticket[0]['id']}\n"
                                  f"Статус: {ticket[0]['status']}\n"
                                  f"Заявитель: {client}\n"
@@ -80,8 +80,18 @@ async def send_report(message: types.Message, state: FSMContext):
     await message.delete()
 
 
+async def set_default_commands(dp):
+    await dp.bot.set_my_commands([
+        types.BotCommand("start", "Запустить бота"),
+        types.BotCommand("help", "Помощь"),
+        types.BotCommand("test", "Тест"),
+        types.BotCommand("form", "Форма"),
+        types.BotCommand("menu", "Меню"),
+    ])
+
+
 def main_register(dp: Dispatcher):
-    dp.register_message_handler(start_cmd, commands=['start', 'help'])
+    dp.register_message_handler(start_cmd, commands=['start', 'ticket'])
     dp.register_message_handler(get_report, commands=['feedback'])
-    dp.register_message_handler(send_report, state=SendBugState.send_bug)
     dp.register_message_handler(get_ticket, commands=['id'])
+    dp.register_message_handler(send_report, state=SendBugState.send_bug)

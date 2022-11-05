@@ -46,6 +46,7 @@ async def get_ticket(message: types.Message):
             await message.answer("Доступ только для администраторов")
         else:
             try:
+                data = int(data)
                 client = db.sql_fetchone(
                     f"SELECT users.name FROM users inner join tickets on users.tg_id = tickets.client  WHERE tickets.id = {data}")
                 contactor = db.sql_fetchone(

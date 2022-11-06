@@ -1,7 +1,6 @@
 from aiogram import types, Dispatcher
 from bot.keyboards import tickets_kb
 from bot import database
-from datetime import datetime
 from bot.notifications import notify_user_increase
 import time
 

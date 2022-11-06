@@ -14,11 +14,11 @@ async def start_cmd(message: types.Message):
 
     db = database.Database()
     if message.chat.type == 'private':
-        if not db.sql_fetchone(sql.check_id(message.from_user.id)):
+        if db.sql_fetchone(sql.check_id(message.from_user.id)) == 'None':
             await message.answer(f"🤖Вас приветствует бот технической поддержки🤖\n"
                                  f"\n"
                                  f"Для доступа к функционалу необходимо зарегистрироваться\n"
-                                 f"..", reply_markup=register_kb())
+                                 f"", reply_markup=register_kb())
         elif db.sql_fetchone(f'select approved from users where tg_id ={message.from_user.id}') == '0':
             msg = await message.answer("Аккаунт еще не подтвержден")
             await asyncio.sleep(5)

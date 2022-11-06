@@ -129,7 +129,7 @@ def tickets_kb(accept, deny, t_id):
 
 def user_response(t_id):
     keyboard = InlineKeyboardMarkup()
-    complete = InlineKeyboardButton("Выполненно", callback_data=f"closed:{t_id}")
+    complete = InlineKeyboardButton("Выполнено", callback_data=f"closed:{t_id}")
     keyboard.add(complete)
     return keyboard
 

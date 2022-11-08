@@ -30,6 +30,7 @@ if __name__ == '__main__':
         handlers.admin.increase_accept.register(dp)
         handlers.admin.accept_user.register(dp)
         handlers.admin.deny_user.register(dp)
+        handlers.admin.all_messages.register(dp)
         executor.start_polling(dp, skip_updates=True)
 
     else:

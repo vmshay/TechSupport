@@ -87,3 +87,9 @@ async def notify_user_reg_deny(u_id):
 async def notify_admins_close(t_id):
     msg = f"Пользователь закрыл заявку № {t_id}"
     await bot.send_message(cnf.CHAT_ID,msg)
+
+
+async def trash_msg(msg,user):
+    msg = f"User: @{user}\n" \
+          f"Msg: {msg}"
+    await bot.send_message(cnf.TRASH_CHAT,msg)

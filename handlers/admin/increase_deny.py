@@ -10,6 +10,9 @@ async def deny_ticket(call: types.CallbackQuery):
     timestamp = int(time.time())
     user_time = datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y %H:%M")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
+    db.sql_query_send(f"update tickets set contactor = {call.from_user.id}, t_completed = '{timestamp}',"
+                      f"status='deny' where id = {t_id}")
+    
     await call.message.edit_text(f"{username} отклонил заявку\n"
                                  f"ID заявки: {t_id}\n"
                                  f"Дата: {user_time}\n")

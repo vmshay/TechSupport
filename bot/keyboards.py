@@ -170,3 +170,12 @@ def new_user_kb(accept, deny, u_id):
     deny = InlineKeyboardButton("Отклонить", callback_data=f"{deny}:{u_id}")
     keyboard.add(accept, deny)
     return keyboard
+
+
+def without_comment():
+    keyboard = InlineKeyboardMarkup()
+    register = InlineKeyboardButton("Отправить без комментария", callback_data="send_noncoment")
+    main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')
+    keyboard.add(register)
+    keyboard.add(main_menu)
+    return keyboard

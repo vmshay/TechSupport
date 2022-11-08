@@ -47,6 +47,7 @@ async def get_ticket(message: types.Message):
         else:
             try:
                 data = int(data)
+                closed_by = db.sql_fetchone(f"SELECT users.name FROM users inner join tickets on users.tg_id = tickets.closed_by  WHERE tickets.id = {data}")
                 client = db.sql_fetchone(
                     f"SELECT users.name FROM users inner join tickets on users.tg_id = tickets.client  WHERE tickets.id = {data}")
                 contactor = db.sql_fetchone(
@@ -57,6 +58,8 @@ async def get_ticket(message: types.Message):
                     status = "Новая"
                 elif ticket[0]['status'] == 'closed':
                     status = "Закрыта"
+                elif ticket[0]['status'] == 'deny':
+                    status = "Отклонена"
                 elif ticket[0]['status'] == 'in progress':
                     status = "В работе"
                 elif ticket[0]['status'] == 'force closed':
@@ -83,7 +86,8 @@ async def get_ticket(message: types.Message):
                     t_completed = datetime.fromtimestamp(int(ticket[0]['t_completed'])).strftime("%d.%m.%Y %H:%M")
                 await message.answer(f"ID: {ticket[0]['id']}\n\n"
                                      f"Заявитель: {client}\n"
-                                     f"Исполнитель: {contactor}\n\n"
+                                     f"Исполнитель: {contactor}\n"
+                                     f"Закрыл: {closed_by}\n\n"
                                      f"Статус: {status}\n"
                                      f"Проблема: {ticket[0]['problem']}\n\n"
                                      f"Инициирована: {t_new}\n"
@@ -103,7 +107,7 @@ async def get_ticket(message: types.Message):
 async def get_report(message: types.Message):
     await message.delete()
     await SendBugState.send_bug.set()
-    msg = await message.answer("Опишите проблему")
+    msg = await message.answer(".")
     await asyncio.sleep(5)
     await msg.delete()
 
@@ -119,6 +123,6 @@ async def send_report(message: types.Message, state: FSMContext):
 
 def main_register(dp: Dispatcher):
     dp.register_message_handler(start_cmd, commands=['start', 'ticket'])
-    dp.register_message_handler(get_report, commands=['feedback'])
+    # dp.register_message_handler(get_report, commands=['/feedback'])
     dp.register_message_handler(get_ticket, commands=['id'])
     dp.register_message_handler(send_report, state=SendBugState.send_bug)

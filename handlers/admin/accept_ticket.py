@@ -20,7 +20,7 @@ async def accept_ticket(call: types.CallbackQuery):
 
     db.sql_query_send(f"update tickets set contactor = {call.from_user.id}, t_progress = '{timestamp}',"
                       f"status='in progress' where id = {t_id}")
-    await notify_user_accept(client_id, t_id)
+    await notify_user_accept(client_id, t_id, username)
 
 
 def register(dp: Dispatcher):

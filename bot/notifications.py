@@ -42,9 +42,10 @@ async def new_ticket(data):
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb("accept", "deny", t_id))
 
 
-async def notify_user_accept(u_id, t_id):
+async def notify_user_accept(u_id, t_id,user):
     msg = f"Заявка принята в работу\n" \
-        f"Когда заявка будет выполненна подтвердите выполнение"
+          f"Придет: {user}\n" \
+          f"Когда заявка будет выполненна подтвердите выполнение"
     await bot.send_message(u_id, msg, reply_markup=user_response(t_id))
 
 
@@ -67,8 +68,9 @@ async def notify_user_deny(u_id):
 
 async def new_user(data):
     msg = f"<b>Новый пользователь</b>\n" \
-        f"ФИО: {data['FIO']}\n" \
-        f"Номер телефона: {data['number']}"
+          f"TG: @{data['tg']}\n" \
+          f"ФИО: {data['FIO']}\n" \
+          f"Номер телефона: {data['number']}"
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=new_user_kb(f"u_accept", f"u_deny", data['id']))
 
 

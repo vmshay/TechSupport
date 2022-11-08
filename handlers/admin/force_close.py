@@ -16,7 +16,7 @@ async def force_close(call: types.CallbackQuery):
     status = db.sql_fetchone(f'select status from tickets where id = {t_id}')
 
     if status != 'closed':
-        db.sql_query_send(f"update tickets set status='force closed',t_completed = '{timestamp}' where id={t_id}")
+        db.sql_query_send(f"update tickets set status='force closed',t_completed = '{timestamp}',closed_by = {call.from_user.id} where id={t_id}")
         await call.message.edit_text(f"{username} принудительно закрыл заявку\n"
                                      f"ID заявки: {t_id}\n"
                                      f"Дата: {u_time}\n")

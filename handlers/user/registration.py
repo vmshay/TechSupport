@@ -58,6 +58,7 @@ async def get_fio(message: types.Message, state: FSMContext):
 
         await state.update_data(FIO=message.text)
         await state.update_data(id=message.from_user.id)
+        await state.update_data(tg=message.from_user.username)
         reg_data = await state.get_data()
         await state.finish()
         msg = await message.answer(f"Заявка отправлена")

@@ -12,10 +12,10 @@ async def close_ticket(call: types.CallbackQuery):
 
     if status != 'force closed':
         db.sql_query_send(f"update tickets set t_completed = '{timestamp}',status = 'closed' where id = {t_id}")
-        await call.message.edit_text("Заявка закрыта")
+        await call.message.edit_text(f"Заявка №{t_id} закрыта")
         await notify_admins_close(t_id)
     else:
-        await call.message.edit_text("Заявка закрыта тех. отделом")
+        await call.message.edit_text(f"Заявка №{t_id} закрыта тех. отделом")
 
 
 def register(dp: Dispatcher):

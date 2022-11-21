@@ -17,6 +17,7 @@ def default_tickets_kb():
     need = InlineKeyboardButton('🖱️ Нужна периферия', callback_data='peripherals')
     printer = InlineKeyboardButton('🖨️ Не работает принтер', callback_data='printer')
     other = InlineKeyboardButton('❔ Другое ', callback_data='other')
+    projector = InlineKeyboardButton('📽️ Не работает проектор ', callback_data='projector')
     main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')
 
     keyboard.add(pc)
@@ -25,6 +26,7 @@ def default_tickets_kb():
     keyboard.add(printer)
     keyboard.add(not_internet)
     keyboard.add(other)
+    keyboard.add(projector)
     keyboard.add(main_menu)
     return keyboard
 

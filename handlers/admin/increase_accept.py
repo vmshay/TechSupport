@@ -6,7 +6,7 @@ from bot.notifications import notify_user_accept
 import time
 
 
-async def accept_ticket(call: types.CallbackQuery):
+async def increase_accept(call: types.CallbackQuery):
     db = database.Database()
     t_id = call.data.split(":")[1]
     timestamp = int(time.time())
@@ -23,4 +23,4 @@ async def accept_ticket(call: types.CallbackQuery):
 
 
 def register(dp: Dispatcher):
-    dp.register_callback_query_handler(accept_ticket, text_startswith='i_accept:')
+    dp.register_callback_query_handler(increase_accept, text_startswith='i_accept:')

@@ -13,10 +13,31 @@ async def accept_ticket(call: types.CallbackQuery):
     u_time = datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y %H:%M")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     client_id = db.sql_fetchone(f"select client from tickets where id = {t_id}")
+    ticket = db.sql_fetchall(f"select category, cab,problem,category from tickets where id={t_id}")
+    
+    if ticket[0]['category'] == 'PC':
+        category = '  Не включается ПК'
+    if ticket[0]['category'] == 'deny_login':
+        category = '  Не входит в Moodle/ПК'
+    if ticket[0]['category'] == 'no_internet':
+        category = '  Нет интернета'
+    if ticket[0]['category'] == 'peripherals':
+        category = '  Нужна периферия'
+    if ticket[0]['category'] == 'printer':
+        category = '  Не работает принтер'
+    if ticket[0]['category'] == 'other':
+        category = '  Другое '
+    if ticket[0]['category'] == 'projector':
+        category = '  Не работает проектор'
 
-    await call.message.edit_text(f"Исполнитель: {username}\n"
-                                 f"ID заявки: {t_id}\n"
-                                 f"Дата: {u_time}\n", reply_markup=increase_ticket(t_id))
+    print("accept ticket")
+    await call.message.edit_text(f"ID: {t_id}\n\n"
+                                 f"Заявитель: {username}\n"
+                                 f"Исполнитель: {username}\n\n"
+                                 f"Аудитория: {ticket[0]['cab']}\n"
+                                 f"Категория: {category}\n"
+                                 f"Комментарий: {ticket[0]['problem']}\n\n"
+                                 f"Взята в работу: {u_time}\n", reply_markup=increase_ticket(t_id))
 
     db.sql_query_send(f"update tickets set contactor = {call.from_user.id}, t_progress = '{timestamp}',"
                       f"status='in progress' where id = {t_id}")

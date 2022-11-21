@@ -26,6 +26,8 @@ async def new_ticket(data):
         category = '🖨️ Не работает принтер'
     if data['Category'] == 'other':
         category = '❔ Другое '
+    if data['Category'] == 'projector':
+        category = '📽️ Не работает проектор'
 
     owner = data['name']
     cabinet = data['cab'].split(' ')[1]
@@ -37,31 +39,31 @@ async def new_ticket(data):
         f"Отправитель: {owner}\n" \
         f"Категория: {category}\n" \
         f"Аудитория: {cabinet}\n" \
-        f"Проблема: {problem}\n" \
+        f"Комментарий: {problem}\n" \
         f"Дата: {time}"
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb("accept", "deny", t_id))
 
 
 async def notify_user_accept(u_id, t_id,user):
-    msg = f"Заявка принята в работу\n" \
+    msg = f"Заявка №{t_id} принята в работу\n" \
           f"Придет: {user}\n" \
           f"Когда заявка будет выполненна подтвердите выполнение"
     await bot.send_message(u_id, msg, reply_markup=user_response(t_id))
 
 
-async def notify_user_increase(u_id):
-    msg = f"Статус заявки был изменен"
+async def notify_user_increase(u_id,t_id):
+    msg = f"Статус заявки №{t_id} был изменен"
     await bot.send_message(u_id, msg)
 
 
-async def notify_user_force_close(u_id):
-    msg = f"Заявка была закрыта тех.отделом\n" \
+async def notify_user_force_close(u_id, t_id):
+    msg = f"Заявка №{t_id} была закрыта тех.отделом\n" \
         f"Для создания новой заявки нажмите /start"
     await bot.send_message(u_id, msg)
 
 
-async def notify_user_deny(u_id):
-    msg = f"Заявка была отклонена\n" \
+async def notify_user_deny(u_id,t_id):
+    msg = f"Заявка №{t_id} была отклонена\n" \
         f"Для создания новой заявки нажмите /start"
     await bot.send_message(u_id, msg)
 
@@ -85,7 +87,7 @@ async def notify_user_reg_deny(u_id):
 
 
 async def notify_admins_close(t_id):
-    msg = f"Пользователь закрыл заявку № {t_id}"
+    msg = f"Пользователь закрыл заявку №{t_id}"
     await bot.send_message(cnf.CHAT_ID,msg)
 
 

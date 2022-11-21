@@ -18,7 +18,7 @@ async def deny_ticket(call: types.CallbackQuery):
     await call.message.edit_text(f"{username} отклонил заявку\n"
                                  f"ID заявки: {t_id}\n"
                                  f"Дата: {u_time}\n")
-    await notify_user_deny(client_id)
+    await notify_user_deny(client_id,t_id)
 
 
 def register(dp: Dispatcher):

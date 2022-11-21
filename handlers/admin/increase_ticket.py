@@ -21,7 +21,7 @@ async def increase_ticket(call: types.CallbackQuery):
                                      f"@hexfavorite\n"
                                      f"@Locotb\n"
                                      f"@FeldwebelWillman", reply_markup=tickets_kb("i_accept", "i_deny", t_id))
-        await notify_user_increase(client_id)
+        await notify_user_increase(client_id,t_id)
 
 
 def register(dp: Dispatcher):

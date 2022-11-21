@@ -20,11 +20,11 @@ async def force_close(call: types.CallbackQuery):
         await call.message.edit_text(f"{username} принудительно закрыл заявку\n"
                                      f"ID заявки: {t_id}\n"
                                      f"Дата: {u_time}\n")
-        await notify_user_force_close(client_id)
+        await notify_user_force_close(client_id,t_id)
     else:
         await call.message.edit_text(f"Заявка закрыта пользователем\n"
                                      f"ID заявки: {t_id}\n"
-                                     f"Дата: {timestamp}\n")
+                                     f"Дата: {u_time}\n")
 
 
 def register(dp: Dispatcher):

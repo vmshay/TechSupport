@@ -46,7 +46,8 @@ def floor_kb():
     floor_2 = InlineKeyboardButton('Второй этаж', callback_data='Floor2')
     floor_3 = InlineKeyboardButton('Третий этаж', callback_data='Floor3')
     floor_4 = InlineKeyboardButton('Четвертый этаж', callback_data='Floor4')
-    floor_b2 = InlineKeyboardButton('Второй корпус', callback_data="Floor_B2")
+    floor_b2 = InlineKeyboardButton('Третье строение', callback_data="Floor_B3")
+    # floor_b2 = InlineKeyboardButton('Пятое строение ', callback_data="Floor_B3")
     main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')
     keyboard.add(floor_4)
     keyboard.add(floor_3)
@@ -70,9 +71,9 @@ def cabinets_kb(floor):
               'Ауд. 307', 'Ауд. 308', 'Ауд. 309']
 
     floor4 = ['Ауд. 401', 'Ауд. 402', 'Ауд. 403',
-              'Ауд. 404', 'Ауд. 405', 'Ауд. 407']
+              'Ауд. 404', 'Ауд. 405', 'Ауд. 406','Ауд. 407']
 
-    build2 = ['Ауд. 48', 'Ауд. 49', 'Ауд. 56',
+    build_3 = ['Ауд. 48', 'Ауд. 49','Ауд. 52','Ауд. 53' 'Ауд. 56',
               'Ауд. 57', 'Ауд. 58', 'Ауд. 61']
 
     keyboard = InlineKeyboardMarkup(row_width=3, resize_keyboard=True)
@@ -110,8 +111,8 @@ def cabinets_kb(floor):
         main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')
         keyboard.add(main_menu)
         return keyboard
-    if floor == "Floor_B2":
-        for cab in build2:
+    if floor == "Floor_B3":
+        for cab in build_3:
             key = InlineKeyboardButton(text=cab, callback_data=cab)
             keyboard.insert(key)
         main_menu = InlineKeyboardButton('↩️Вернуться в меню', callback_data='main_menu')

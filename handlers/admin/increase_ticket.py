@@ -9,7 +9,6 @@ async def increase_ticket(call: types.CallbackQuery):
     db = database.Database()
     t_id = call.data.split(":")[1]
     status = db.sql_fetchone(f'select status from tickets where id = {t_id}')
-    print(status)
     if status == 'closed':
         await call.message.edit_text(f"Заявка закрыта поьзователем\n"
                                      f"ID заявки: {t_id}\n")

@@ -13,6 +13,8 @@ async def accept_ticket(call: types.CallbackQuery):
     u_time = datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y %H:%M")
     username = db.sql_fetchone(f"select name from users where tg_id = {call.from_user.id}")
     client_id = db.sql_fetchone(f"select client from tickets where id = {t_id}")
+    client_name = db.sql_fetchone(f"select users.name from users inner join tickets on users.tg_id = tickets.client where tickets.id = {t_id}")
+
     ticket = db.sql_fetchall(f"select category, cab,problem,category from tickets where id={t_id}")
     
     if ticket[0]['category'] == 'PC':
@@ -32,7 +34,7 @@ async def accept_ticket(call: types.CallbackQuery):
 
     print("accept ticket")
     await call.message.edit_text(f"ID: {t_id}\n\n"
-                                 f"Заявитель: {username}\n"
+                                 f"Заявитель: {client_name}\n"
                                  f"Исполнитель: {username}\n\n"
                                  f"Аудитория: {ticket[0]['cab']}\n"
                                  f"Категория: {category}\n"

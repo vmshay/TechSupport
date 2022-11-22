@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from bot.dispatcher import bot
 import bot.config as cnf
 from bot.keyboards import tickets_kb, user_response, new_user_kb
@@ -7,8 +6,8 @@ from bot.keyboards import tickets_kb, user_response, new_user_kb
 
 async def new_bug(data):
     msg = f"<b>Обратная связь</b>\n" \
-        f"Сообщение: {data['bug']}\n" \
-        f"Отправитель: {data['from_user']}\n"
+          f"Сообщение: {data['bug']}\n" \
+          f"Отправитель: {data['from_user']}\n"
     await bot.send_message(cnf.CHAT_ID, msg)
 
 
@@ -35,36 +34,36 @@ async def new_ticket(data):
     t_id = data['id']
     time = datetime.fromtimestamp(data['t_new']).strftime("%d.%m.%Y %H:%M")
     msg = f"<b>Новый тикет!</b>\n" \
-        f"ID: {t_id}\n" \
-        f"Отправитель: {owner}\n" \
-        f"Категория: {category}\n" \
-        f"Аудитория: {cabinet}\n" \
-        f"Комментарий: {problem}\n" \
-        f"Дата: {time}"
+          f"ID: {t_id}\n" \
+          f"Отправитель: {owner}\n" \
+          f"Категория: {category}\n" \
+          f"Аудитория: {cabinet}\n" \
+          f"Комментарий: {problem}\n" \
+          f"Дата: {time}"
     await bot.send_message(cnf.CHAT_ID, msg, reply_markup=tickets_kb("accept", "deny", t_id))
 
 
-async def notify_user_accept(u_id, t_id,user):
+async def notify_user_accept(u_id, t_id, user):
     msg = f"Заявка №{t_id} принята в работу\n" \
           f"Придет: {user}\n" \
           f"Когда заявка будет выполненна подтвердите выполнение"
     await bot.send_message(u_id, msg, reply_markup=user_response(t_id))
 
 
-async def notify_user_increase(u_id,t_id):
+async def notify_user_increase(u_id, t_id):
     msg = f"Статус заявки №{t_id} был изменен"
     await bot.send_message(u_id, msg)
 
 
 async def notify_user_force_close(u_id, t_id):
     msg = f"Заявка №{t_id} была закрыта тех.отделом\n" \
-        f"Для создания новой заявки нажмите /start"
+          f"Для создания новой заявки нажмите /start"
     await bot.send_message(u_id, msg)
 
 
-async def notify_user_deny(u_id,t_id):
+async def notify_user_deny(u_id, t_id):
     msg = f"Заявка №{t_id} была отклонена\n" \
-        f"Для создания новой заявки нажмите /start"
+          f"Для создания новой заявки нажмите /start"
     await bot.send_message(u_id, msg)
 
 
@@ -88,10 +87,10 @@ async def notify_user_reg_deny(u_id):
 
 async def notify_admins_close(t_id):
     msg = f"Пользователь закрыл заявку №{t_id}"
-    await bot.send_message(cnf.CHAT_ID,msg)
+    await bot.send_message(cnf.CHAT_ID, msg)
 
 
-async def trash_msg(msg,user):
+async def trash_msg(msg, user):
     msg = f"User: @{user}\n" \
           f"Msg: {msg}"
-    await bot.send_message(cnf.TRASH_CHAT,msg)
+    await bot.send_message(cnf.TRASH_CHAT, msg)

@@ -13,3 +13,4 @@ python-dotenv==0.21.0
 pytz==2022.6
 yarl==1.8.1
 mysql-connector-python~=8.0.31
+phonenumbers~=8.13.0
